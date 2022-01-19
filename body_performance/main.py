@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import csv
 import pandas as pd
 
+# heatmap
+
 x = np.arange(3)
 print(x)
 years = ['2018', '2019', '2020']
@@ -22,3 +24,10 @@ for line in rdr:
   count += 1
   if count == 10:
     break
+
+bp = pd.read_csv("bodyPerformance.csv", header=None)
+print(bp[0])
+
+selectdata = pd.DataFrame(bp, columns=["gender"])
+
+print(selectdata)

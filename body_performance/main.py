@@ -50,4 +50,8 @@ for i in range(len(selectdata)):
     dic[selected_age] += 1
 
 dic = sorted(dic.items())
-print(dic)
+x, y = zip(*dic)
+
+plt.bar(np.arange(len(x)), y)
+plt.xticks(np.arange(len(x)), x)
+plt.show()

@@ -5,7 +5,7 @@ import matplotlib
 matplotlib.rcParams['font.family'] = 'AppleGothic'
 matplotlib.rcParams['font.size'] =  15
 matplotlib.rcParams['axes.unicode_minus'] = False
-import seaborn as sns
+# import seaborn as sns
 # heatmap
 # `가정 및 예측`
 
@@ -28,8 +28,8 @@ import seaborn as sns
 
 bp = pd.read_csv("bodyPerformance.csv", header="infer")
 
-ax = sns.heatmap(bp)
-plt.show()
+# ax = sns.heatmap(bp)
+# plt.show()
 
 selectdata = pd.DataFrame(bp, columns=["age", "class"])
 print("select data console")
@@ -85,8 +85,52 @@ print(aclass_num)
 plt.plot( pie_generation_labels, aclass_num, marker='o')
 plt.title('각 세대별 aclass 비율')
 plt.show()
-  
 
+print('*' * 50)
+height_sit_data = pd.DataFrame(bp, columns=['height_cm', 'sit and bend forward_cm'])
+print(height_sit_data)
+
+height_160_under = height_sit_data.loc[height_sit_data['height_cm'] < 160]
+height_160_170 = height_sit_data.loc[(height_sit_data['height_cm'] >= 160) & (height_sit_data['height_cm'] < 170)]
+height_170_180 = height_sit_data.loc[(height_sit_data['height_cm'] >= 170) & (height_sit_data['height_cm'] < 180)]
+height_180_over = height_sit_data.loc[height_sit_data['height_cm'] > 180]
+
+height_160_under_mean = height_160_under['sit and bend forward_cm'].mean()
+height_160_170_mean = height_160_170['sit and bend forward_cm'].mean()
+height_170_180_mean = height_170_180['sit and bend forward_cm'].mean()
+height_180_over_mean = height_180_over['sit and bend forward_cm'].mean()
+
+height_sit_count_list = [height_160_under_mean, height_160_170_mean, height_170_180_mean, height_180_over_mean]
+height_sit_labels = ['160under', '160~170', '170~180', '180over']
+plt.pie(height_sit_count_list, labels=height_sit_labels, wedgeprops=wedgeprops, counterclock=90, autopct='%.1f%%', pctdistance=0.7)
+plt.show()
+
+height_count_list = [height_160_under.count()[0], height_160_170.count()[0], height_170_180.count()[0], height_180_over.count()[0]]
+plt.bar(height_sit_labels, height_count_list, alpha=0.5)
+plt.show()
+
+physical_data = pd.DataFrame(bp, columns=['age', 'diastolic',	'systolic',	'gripForce',	'sit and bend forward_cm',	'sit-ups counts',	'broad jump_cm'])
+
+tw_phy_data = np.array(physical_data.loc[(physical_data['age'] >= 20) & (physical_data['age'] < 30)].mean())
+th_phy_data = np.array(physical_data.loc[(physical_data['age'] >= 30) & (physical_data['age'] < 40)].mean())
+fr_phy_data = np.array(physical_data.loc[(physical_data['age'] >= 40) & (physical_data['age'] < 50)].mean())
+fiover_phy_data = np.array(physical_data.loc[(physical_data['age'] >= 50)].mean())
+
+print(tw_phy_data)
+
+w = 0.2
+X_axis = np.arange(len(physical_data.columns))
+
+plt.figure(figsize=(15,5))
+plt.bar(X_axis - (w * 2), tw_phy_data, label='20대', width=w)
+plt.bar(X_axis - w, th_phy_data, label='30대', width=w)
+plt.bar(X_axis, fr_phy_data, label='40대', width=w)
+plt.bar(X_axis + w, tw_phy_data, label='50대 이상', width=w)
+plt.title('세대별 각 운동 수행 능력 평균')
+plt.xticks(X_axis, physical_data.columns)
+plt.yticks([100, 150, 200])
+plt.legend()
+plt.show()
 
 
 # from flask import Flask
